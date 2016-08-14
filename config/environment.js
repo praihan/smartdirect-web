@@ -19,6 +19,17 @@ module.exports = function(environment) {
     }
   };
 
+  // Authentication set up
+  ENV['ember-simple-auth'] = {
+    authenticationRoute: 'index',
+    routeAfterAuthentication: 'protected',
+    routeIfAlreadyAuthenticated: 'protected'
+  };
+  ENV['auth0-ember-simple-auth'] = {
+    clientID: "LbGid9glzIogma9BHpJYvy4svR5A1lGa",
+    domain: "smartdirect.auth0.com"
+  };
+
   if (environment === 'development') {
     // ENV.APP.LOG_RESOLVER = true;
     // ENV.APP.LOG_ACTIVE_GENERATION = true;
