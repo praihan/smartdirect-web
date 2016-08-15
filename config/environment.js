@@ -1,7 +1,7 @@
 /* jshint node: true */
 
 module.exports = function(environment) {
-  var ENV = {
+  const ENV = {
     modulePrefix: 'smartdirect-web',
     environment: environment,
     rootURL: '/',
@@ -21,9 +21,7 @@ module.exports = function(environment) {
 
   // Authentication set up
   ENV['ember-simple-auth'] = {
-    authenticationRoute: 'index',
-    routeAfterAuthentication: 'protected',
-    routeIfAlreadyAuthenticated: 'protected'
+    baseURL: ENV.rootURL,
   };
   ENV['auth0-ember-simple-auth'] = {
     clientID: "LbGid9glzIogma9BHpJYvy4svR5A1lGa",

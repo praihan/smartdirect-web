@@ -6,7 +6,6 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
   actions: {
     login() {
       const lockOptions = {
-        allowedConnecions: ['github'],
         authParams: { scope: 'openid' }
       };
       this.get('session').authenticate('simple-auth-authenticator:lock', lockOptions);
