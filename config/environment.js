@@ -20,13 +20,16 @@ module.exports = function(environment) {
   };
 
   // Authentication set up
-  ENV['ember-simple-auth'] = {
-    baseURL: ENV.rootURL,
-  };
-  ENV['auth0-ember-simple-auth'] = {
-    clientID: "LbGid9glzIogma9BHpJYvy4svR5A1lGa",
-    domain: "smartdirect.auth0.com"
-  };
+  if (environment !== 'production') {
+    // In non-production set up we use the Smartdirect-Develop client
+    ENV['ember-simple-auth'] = {
+      baseURL: ENV.rootURL,
+    };
+    ENV['auth0-ember-simple-auth'] = {
+      clientID: "LbGid9glzIogma9BHpJYvy4svR5A1lGa",
+      domain: "smartdirect.auth0.com"
+    };
+  }
 
   if (environment === 'development') {
     // ENV.APP.LOG_RESOLVER = true;
