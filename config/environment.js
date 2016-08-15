@@ -1,4 +1,10 @@
-/* jshint node: true */
+const getEnv = function getEnv(varName) {
+  varName = String(varName);
+  if (!process.env[varName]) {
+    throw Error(`Missing environment variable '${varName}'`);
+  }
+  return process.env[varName];
+};
 
 module.exports = function(environment) {
   const ENV = {
@@ -20,14 +26,24 @@ module.exports = function(environment) {
   };
 
   // Authentication set up
+  ENV['ember-simple-auth'] = {
+    baseURL: ENV.rootURL,
+  };
+
   if (environment !== 'production') {
     // In non-production set up we use the Smartdirect-Develop client
+    ENV['auth0-ember-simple-auth'] = {
+      clientID: 'LbGid9glzIogma9BHpJYvy4svR5A1lGa',
+      domain: 'smartdirect.auth0.com'
+    };
+  } else {
+    // fetch config from whoever is building the app
     ENV['ember-simple-auth'] = {
       baseURL: ENV.rootURL,
     };
     ENV['auth0-ember-simple-auth'] = {
-      clientID: "LbGid9glzIogma9BHpJYvy4svR5A1lGa",
-      domain: "smartdirect.auth0.com"
+      clientID: getEnv('AUTH0_CLIENT_ID'),
+      domain: getEnv('AUTH0_DOMAIN')
     };
   }
 
