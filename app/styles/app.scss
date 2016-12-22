@@ -1,3 +1,21 @@
-  .main.container {
-    margin-top: 5em;
+.main.container {
+  padding-top: 5em;
+
+  &.login {
+    display: flex;
+    justify-content: center;
+    align-content: center;
   }
+}
+
+.fill-screen {
+  width: 100vw;
+  height: 100vh;
+}
+
+.login-gradient-background {
+  /* taken from auth0 lock */
+  background: radial-gradient(lighten(#222228, 15%), #111118), rgba(34,34,40, .94);
+  z-index: -1;
+  opacity: 1;
+}

@@ -32,18 +32,15 @@ module.exports = function(environment) {
 
   if (environment !== 'production') {
     // In non-production set up we use the Smartdirect-Develop client
-    ENV['auth0-ember-simple-auth'] = {
+    ENV['ember-simple-auth']['auth0'] = {
       clientID: 'LbGid9glzIogma9BHpJYvy4svR5A1lGa',
-      domain: 'smartdirect.auth0.com'
+      domain: 'smartdirect.auth0.com',
     };
   } else {
     // fetch config from whoever is building the app
-    ENV['ember-simple-auth'] = {
-      baseURL: ENV.rootURL,
-    };
-    ENV['auth0-ember-simple-auth'] = {
+    ENV['ember-simple-auth']['auth0'] = {
       clientID: getEnv('AUTH0_CLIENT_ID'),
-      domain: getEnv('AUTH0_DOMAIN')
+      domain: getEnv('AUTH0_DOMAIN'),
     };
   }
 
