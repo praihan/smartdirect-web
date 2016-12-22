@@ -1,6 +1,13 @@
 import Ember from 'ember';
 
-export default Ember.Controller.extend({
-  session: Ember.inject.service('session'),
-  profile: Ember.inject.service('profile'),
+const {
+  Controller,
+  inject: {
+    service,
+  },
+} = Ember;
+
+export default Controller.extend({
+  session: service(),
+  profile: service(),
 });

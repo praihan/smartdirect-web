@@ -1,20 +1,32 @@
 import Ember from 'ember';
 import ApplicationRouteMixin from '../mixins/application-route-mixin';
 
-export default Ember.Route.extend(ApplicationRouteMixin, {
+const {
+  Route,
+  merge, copy,
+  inject: {
+    service,
+  },
+} = Ember;
+
+const DEFAULT_LOCK_OPTS = {
+  auth: {
+    redirect: false,
+    params: {
+      scope: 'openid email name'
+    }
+  }
+};
+
+export default Route.extend(ApplicationRouteMixin, {
+  session: service(),
+
   routeAfterAuthentication: 'home',
 
   actions: {
     login(extraOpts) {
-      const lockOptions = Ember.merge(
-        {
-          auth: {
-            redirect: false,
-            params: {
-              scope: 'openid email name'
-            }
-          }
-        },
+      const lockOptions = merge(
+        copy(DEFAULT_LOCK_OPTS, true), // make a deep copy of defaults
         extraOpts
       );
       this.get('session').authenticate('authenticator:auth0-lock', lockOptions);

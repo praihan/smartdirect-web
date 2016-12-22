@@ -1,6 +1,12 @@
 import Ember from 'ember';
 
-export default Ember.Service.extend({
+const {
+  Service,
+  on,
+  assert,
+} = Ember;
+
+export default Service.extend({
 
   /**
    * Stores a key mapped to a value in the persistence store
@@ -34,7 +40,7 @@ export default Ember.Service.extend({
     window.localStorage.clear();
   },
 
-  _ensureLocalStorageExists: Ember.on('init', function ensureLocalStorageExists() {
-    Ember.assert(window.localStorage, 'window.localStorage should exist');
+  _ensureLocalStorageExists: on('init', function ensureLocalStorageExists() {
+    assert(window.localStorage, 'window.localStorage should exist');
   }),
 });

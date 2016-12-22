@@ -1,11 +1,19 @@
 import Ember from 'ember';
 import UnauthenticatedRouteMixin from '../mixins/unauthenticated-route-mixin';
 
-export default Ember.Route.extend(UnauthenticatedRouteMixin, {
+const {
+  Route,
+  run: {
+    scheduleOnce,
+  }
+} = Ember;
+
+export default Route.extend(UnauthenticatedRouteMixin, {
   routeIfAlreadyAuthenticated: 'index',
   actions: {
     didTransition() {
-      Ember.run.scheduleOnce('afterRender', this, function() {
+      scheduleOnce('afterRender', this, function() {
+        // after we render, we need to also render the inline login thing
         this.send('login', { container: 'login-container' });
       })
     }

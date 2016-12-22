@@ -1,5 +1,9 @@
 import Ember from 'ember';
 import UnauthenticatedRouteMixin from 'ember-simple-auth/mixins/unauthenticated-route-mixin';
 
-export default Ember.Mixin.create(UnauthenticatedRouteMixin, {
+const {
+  Mixin
+} = Ember;
+
+export default Mixin.create(UnauthenticatedRouteMixin, {
 });
