@@ -1,9 +1,13 @@
-const path = require('path');
-
 module.exports = {
-  extends: [
-    require.resolve('ember-cli-eslint/coding-standard/ember-application.js')
-  ],
+  root: true,
+  parserOptions: {
+    ecmaVersion: 6,
+    sourceType: 'module'
+  },
+  extends: 'eslint:recommended',
+  env: {
+    'browser': true
+  },
   rules: {
     'comma-dangle': ['off'],
   }
