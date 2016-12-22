@@ -6,6 +6,7 @@
     "ember-qunit-notifications": "0.1.0",
     "ember-simple-auth": "0.8.0",
     "auth0-lock": "^7.10.2",
-    "jsrsasign": "^5.0.1"
+    "jsrsasign": "^5.0.1",
+    "semantic-ui": "^2.2.7"
   }
 }

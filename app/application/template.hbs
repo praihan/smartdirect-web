@@ -1,12 +1,39 @@
-<h1 id="title">Welcome to Auth0 Ember Simple Auth</h1>
+<div class="ui fixed borderless menu">
+<div class="ui container">
 
-<header>
+  {{! On the left we have the product icon + name }}
+  <a class="header item" href="#">
+    Smartdirect
+  </a>
+
   {{#if session.isAuthenticated}}
-    <h3>You are currently logged as: {{session.data.authenticated.profile.email}}</h3>
-    <h4>JWT:</h4>
-    <p>{{session.data.authenticated.jwt}}</p>
-    <a href="#" {{action 'logout'}}>Logout</a>
-  {{/if}}
-</header>
+    {{!
+      On the right we have a dropdown with their given name.
+      They can access all the different settings here.
+    }}
+    {{#ui-dropdown class="item right"}}
+      {{profile.givenName}}
 
-{{outlet}}
+      <i class="dropdown icon"></i>
+      <div class="menu">
+        <a class="item" href="#" {{action 'logout'}}>Logout</a>
+      </div>
+    {{/ui-dropdown}}
+  {{else}}
+    {{!
+      If we aren't logged in, then make it clear with a colored button
+      that they should log in
+    }}
+    <div class="item right">
+    <button class="ui blue button" href="#" {{action 'login'}}>
+      Login
+    </button>
+    </div>
+  {{/if}}
+
+</div>
+</div>
+
+<div class="ui main container">
+  {{outlet}}
+</div>
