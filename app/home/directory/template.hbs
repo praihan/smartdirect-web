@@ -1,0 +1,14 @@
+<div class="ui main container">
+  <h1>{{model.name}}</h1>
+
+  <ul>
+    {{#each model.children as |child|}}
+      <li>
+      {{#link-to 'home.directory' child}}
+        {{child.name}}
+      {{/link-to}}
+      </li>
+    {{/each}}
+  </ul>
+
+</div>
