@@ -1,14 +1,29 @@
 <div class="ui main container">
-  <h1>{{model.name}}</h1>
+
+  {{! Create a breadcrumb to access all parent directories at the top }}
+  <div class="ui breadcrumb">
+    {{#each model.ancestors.content as |ancestor|}}
+      {{! Add a breadcrumb link to each ancestor }}
+      {{#link-to 'home.directory' ancestor class='section'}}
+        {{format-directory-name ancestor.name}}
+      {{/link-to}}
+      {{! Add a divider between each ancestor }}
+      <i class="right angle icon divider"></i>
+    {{/each}}
+    {{! Current directory is last breadcrumb }}
+    <div class='section'>
+      {{format-directory-name model.name}}
+    </div>
+  </div>
 
   <ul>
-    {{#each model.children as |child|}}
-      <li>
-      {{#link-to 'home.directory' child}}
-        {{child.name}}
-      {{/link-to}}
-      </li>
-    {{/each}}
+  {{#each model.children as |child|}}
+    <li>
+    {{#link-to 'home.directory' child}}
+      {{child.name}}
+    {{/link-to}}
+    </li>
+  {{/each}}
   </ul>
 
 </div>

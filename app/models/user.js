@@ -1,6 +1,10 @@
 import DS from 'ember-data';
 
 const {
+  computed
+} = Ember;
+
+const {
   Model,
   attr,
   belongsTo,
