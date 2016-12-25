@@ -1,34 +1,41 @@
 <div class="ui main container">
 
-  <table class='ui celled striped table'>
+  {{! Create a breadcrumb to access all parent directories from the top }}
+  <div class="ui breadcrumb">
+    {{#each model.ancestors.content as |ancestor|}}
+      {{! Add a breadcrumb link to each ancestor }}
+      {{#link-to 'home.directory' ancestor class='section'}}
+        {{format-directory-name ancestor.name}}
+      {{/link-to}}
+      {{! Add a divider between each ancestor }}
+      <i class="right angle icon divider"></i>
+    {{/each}}
+    {{! Current directory is last breadcrumb }}
+    <h4 class='section'>
+      {{format-directory-name model.name}}
+    </h4>
+  </div>
+
+  <table class='ui unstackable table'>
     <thead>
-    {{! Create a breadcrumb to access all parent directories at the top }}
-    <tr>
-    <th class="ui breadcrumb">
-      {{#each model.ancestors.content as |ancestor|}}
-        {{! Add a breadcrumb link to each ancestor }}
-        {{#link-to 'home.directory' ancestor class='section'}}
-          {{format-directory-name ancestor.name}}
-        {{/link-to}}
-        {{! Add a divider between each ancestor }}
-        <i class="right angle icon divider"></i>
-      {{/each}}
-      {{! Current directory is last breadcrumb }}
-      <div class='section'>
-        {{format-directory-name model.name}}
-      </div>
-    </th>
-    </tr>
+      <tr>
+      <th>Name</th>
+      <th>Modified</th>
+      </tr>
     </thead>
+
     <tbody>
       {{#each model.children as |child|}}
       <tr>
+        {{! Name }}
         <td>
           {{#link-to 'home.directory' child}}
             <i class="folder icon"></i>
             {{child.name}}
           {{/link-to}}
         </td>
+        {{! Modified }}
+        <td>--</td>
       </tr>
       {{/each}}
     </tbody>
