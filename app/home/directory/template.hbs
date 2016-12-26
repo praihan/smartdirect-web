@@ -21,12 +21,12 @@
       <div class='ui loader'></div>
     </div>
     <div class='ui top attached mini menu'>
-      {{#if selectedDirectory}}
+      {{#if selectedDirOrFile}}
         <a href='#' class='ui item'>
           <i class='write icon'></i>
           Rename
         </a>
-        <a {{action 'destroyDirOrFile' selectedDirectory}} class='ui item'>
+        <a {{action 'destroyDirOrFile' selectedDirOrFile}} class='ui item'>
           <i class='trash icon'></i>
           Delete
         </a>
@@ -59,7 +59,7 @@
           <tr
             data-id='{{child.id}}'
             class='table-entry directory-entry'
-            {{action 'setSelectedDirectory' child }}
+            {{action 'setSelectedDirOrFile' child }}
           >
             {{! Name }}
             <td>
