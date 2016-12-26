@@ -36,7 +36,11 @@
 
     <tbody>
       {{#each model.children as |child|}}
-      <tr>
+      <tr
+        data-id='{{child.id}}'
+        class='table-entry directory-entry'
+        {{action 'setSelectedDirectory' child }}
+      >
         {{! Name }}
         <td>
           {{#link-to 'home.directory' child}}
