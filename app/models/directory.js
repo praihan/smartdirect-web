@@ -20,8 +20,8 @@ export default Model.extend({
   parent: belongsTo('directory', { inverse: 'children', async: true, }),
   children: hasMany('directory', { inverse: 'parent', async: true, }),
 
-  createdAt: attr('date'),
-  updatedAt: attr('date'),
+  createdAt: attr('date', { readOnly: true }),
+  updatedAt: attr('date', { readOnly: true }),
 
   ancestors: computed('', function() {
     const promise = this.get('parent').then(parent => {

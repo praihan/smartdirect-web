@@ -3,10 +3,13 @@ import Ember from 'ember';
 const {
   Controller,
   $,
+  assert,
 } = Ember;
 
 export default Controller.extend({
   selectedDirectory: null,
+
+  newDirOrFileNameText: '',
 
   actions: {
     setSelectedDirectory(directory) {
@@ -24,6 +27,18 @@ export default Controller.extend({
           $(tr).addClass('active');
         }
       });
+    },
+
+    createNewDirectory(directoryName) {
+      assert('directoryName is string', typeof directoryName === 'string');
+      const newDirectroy = this.store.createRecord('directory', {
+        name: directoryName,
+        parent: this.get('model'),
+      });
+      newDirectroy.save()
+        .catch(() => {
+          newDirectroy.destroyRecord()
+        });
     }
   }
 });

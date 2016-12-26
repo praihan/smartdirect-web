@@ -28,10 +28,13 @@
       </a>
     {{/if}}
     <div class='right menu'>
+      <div class='ui input'>
+      {{input type='text' value=newDirOrFileNameText placeholder='Name'}}
+      </div>
       <a href='#' class='ui item'>
         <i class='file icon'></i>
       </a>
-      <a href='#' class='ui item'>
+      <a class='ui item' {{action 'createNewDirectory' newDirOrFileNameText}}>
         <i class='folder icon'></i>
       </a>
     </div>
