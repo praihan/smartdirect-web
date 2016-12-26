@@ -17,14 +17,24 @@
   </div>
 
   <div class='ui top attached mini menu'>
-  <div class='right menu'>
-    <a href='#' class='ui item'>
-      <i class='file icon'></i>
-    </a>
-    <a href='#' class='ui item'>
-      <i class='folder icon'></i>
-    </a>
-  </div>
+    {{#if selectedDirectory}}
+      <a href='#' class='ui item'>
+        <i class='write icon'></i>
+        Rename
+      </a>
+      <a href='#' class='ui item'>
+        <i class='trash icon'></i>
+        Delete
+      </a>
+    {{/if}}
+    <div class='right menu'>
+      <a href='#' class='ui item'>
+        <i class='file icon'></i>
+      </a>
+      <a href='#' class='ui item'>
+        <i class='folder icon'></i>
+      </a>
+    </div>
   </div>
   <table class='ui bottom attached unstackable selectable table'>
     <thead>
