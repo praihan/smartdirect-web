@@ -11,6 +11,9 @@ const {
   assert,
   computed,
   observer,
+  run: {
+    scheduleOnce,
+  },
 } = Ember;
 
 export default Controller.extend({
@@ -46,31 +49,20 @@ export default Controller.extend({
   actions: {
     setSelectedDirOrFile(dirOrFile) {
       this.set('selectedDirOrFile', dirOrFile);
-      // We need to highlight the selected directory
-      //   1. Unhighlight all directories
-      //   2. Highlight only the selected directory(ies)
-      const rows = $('table tr.table-entry').not('.loading');
-      rows.removeClass('active');
-      if (dirOrFile == null) {
-        return;
-      }
-      // TODO: Account for files too
-      rows.each((i, tr) => {
-        if ($.attr(tr, 'data-id') === dirOrFile.get('id')) {
-          $(tr).addClass('active');
-        }
-      });
     },
 
     createNewDirectory(directoryName) {
       assert('directoryName is string', typeof directoryName === 'string');
-      const newDirectroy = this.store.createRecord('directory', {
+      const newDirectory = this.store.createRecord('directory', {
         name: directoryName,
         parent: this.get('model'),
       });
-      newDirectroy.save()
+      newDirectory.save()
+        .then(() => {
+          this.send('setSelectedDirOrFile', newDirectory);
+        })
         .catch(() => {
-          newDirectroy.destroyRecord()
+          newDirectory.destroyRecord()
         });
     },
 

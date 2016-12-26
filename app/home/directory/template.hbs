@@ -58,7 +58,8 @@
         {{#unless child.isNew}}
           <tr
             data-id='{{child.id}}'
-            class='table-entry directory-entry'
+            class='table-entry directory-entry
+              {{if selectedDirOrFile (if (eq selectedDirOrFile child) 'active')}}'
             {{action 'setSelectedDirOrFile' child }}
           >
             {{! Name }}
