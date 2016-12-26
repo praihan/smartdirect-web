@@ -16,58 +16,77 @@
     </h4>
   </div>
 
-  <div class='ui top attached mini menu'>
-    {{#if selectedDirectory}}
-      <a href='#' class='ui item'>
-        <i class='write icon'></i>
-        Rename
-      </a>
-      <a href='#' class='ui item'>
-        <i class='trash icon'></i>
-        Delete
-      </a>
-    {{/if}}
-    <div class='right menu'>
-      <div class='ui category item'>
-      <div class='ui transparent input'>
-      {{input class='prompt' type='text' value=newDirOrFileNameText placeholder='Name'}}
-      </div>
-      </div>
-      <a href='#' class='ui item'>
-        <i class='file icon'></i>
-      </a>
-      <a class='ui item' {{action 'createNewDirectory' newDirOrFileNameText}}>
-        <i class='folder icon'></i>
-      </a>
+  <div class='dimmable'>
+    <div class='ui inverted dimmer {{if isLoading 'active' }}'>
+      <div class='ui loader'></div>
     </div>
-  </div>
-  <table class='ui bottom attached unstackable selectable table'>
-    <thead>
-      <tr>
-      <th>Name</th>
-      <th>Modified</th>
-      </tr>
-    </thead>
+    <div class='ui top attached mini menu'>
+      {{#if selectedDirectory}}
+        <a href='#' class='ui item'>
+          <i class='write icon'></i>
+          Rename
+        </a>
+        <a {{action 'destroyDirOrFile' selectedDirectory}} class='ui item'>
+          <i class='trash icon'></i>
+          Delete
+        </a>
+      {{/if}}
+      <div class='right menu'>
+        <div class='ui category item'>
+          <div class='ui transparent input'>
+          {{input class='prompt' type='text' value=newDirOrFileNameText placeholder='Name'}}
+          </div>
+        </div>
+        <a href='#' class='ui item'>
+          <i class='file icon'></i>
+        </a>
+        <a class='ui item' {{action 'createNewDirectory' newDirOrFileNameText}}>
+          <i class='folder icon'></i>
+        </a>
+      </div>
+    </div>
+    <table class='ui bottom attached unstackable selectable table'>
+      <thead>
+        <tr>
+        <th>Name</th>
+        <th>Modified</th>
+        </tr>
+      </thead>
 
-    <tbody>
-      {{#each model.children as |child|}}
-      <tr
-        data-id='{{child.id}}'
-        class='table-entry directory-entry'
-        {{action 'setSelectedDirectory' child }}
-      >
-        {{! Name }}
-        <td>
-          {{#link-to 'home.directory' child}}
-            <i class='folder icon'></i>
-            {{child.name}}
-          {{/link-to}}
-        </td>
-        {{! Modified }}
-        <td>--</td>
-      </tr>
-      {{/each}}
-    </tbody>
-  </table>
+      <tbody>
+        {{#each model.children as |child|}}
+        {{#unless child.isNew}}
+          <tr
+            data-id='{{child.id}}'
+            class='table-entry directory-entry'
+            {{action 'setSelectedDirectory' child }}
+          >
+            {{! Name }}
+            <td>
+              {{#link-to 'home.directory' child}}
+                <i class='folder icon'></i>
+                {{child.name}}
+              {{/link-to}}
+            </td>
+            {{! Modified }}
+            <td>--</td>
+          </tr>
+        {{else}}
+          <tr class='table-entry directory-entry loading'>
+            {{! Name }}
+            <td>
+              <a href='#'>
+                <i class='folder icon'></i>
+                {{child.name}}
+              </a>
+            </td>
+            {{! Modified }}
+            <td>--</td>
+          </tr>
+        {{/unless}}
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
 
 </div>
