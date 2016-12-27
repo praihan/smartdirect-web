@@ -31,6 +31,10 @@ export default Controller.extend({
    */
   isLoading: computed.notEmpty('pendingDirectories'),
 
+  /**
+   * Create a new directory with the given name and set it selected.
+   * Returns a promise that resolves to the newly created directory.
+   */
   _createNewDirectory(directoryName) {
     assert('directoryName is string', typeof directoryName === 'string');
     const newDirectory = this.store.createRecord('directory', {
@@ -42,6 +46,7 @@ export default Controller.extend({
         // Set the current (and only) selected item to the
         // newly created directory
         this.send('setSelectedDirOrFile', newDirectory);
+        return newDirectory;
       })
       .catch((err) => {
         newDirectory.destroyRecord();
@@ -57,22 +62,37 @@ export default Controller.extend({
   }),
 
   actions: {
+    /**
+     * Add a directory or file to the list of selected ones.
+     */
     addSelectedDirOrFile(dirOrFile) {
       Ember.assert('directory or file provided', dirOrFile);
       this.get('selectedDirOrFiles').pushObject(dirOrFile);
     },
+    /**
+     * Deselect all selected directories and files.
+     */
     clearSelectedDirOrFiles() {
       this.get('selectedDirOrFiles').clear();
     },
+    /**
+     * Select a directory or file and deselect everything else.
+     */
     setSelectedDirOrFile(dirOrFile) {
       this.send('clearSelectedDirOrFiles');
       this.send('addSelectedDirOrFile', dirOrFile);
     },
 
+    /**
+     * Create a new directory with the given name.
+     */
     createNewDirectory(directoryName) {
       this._createNewDirectory(directoryName)
         .catch(() => { });
     },
+    /**
+     * Create a new directory from the user-visible input text.
+     */
     createNewDirectoryFromInput() {
       this._createNewDirectory(this.get('newDirOrFileNameText'))
         .then(() => {
@@ -81,6 +101,9 @@ export default Controller.extend({
         .catch(() => { });
     },
 
+    /**
+     * Destroy the given directory or file from the store.
+     */
     destroyDirOrFile(dirOrFile) {
       assert('directory or file provided', dirOrFile);
       dirOrFile.destroyRecord()
@@ -95,6 +118,10 @@ export default Controller.extend({
           dirOrFile.rollback();
         });
     },
+    /**
+     * Destroy a list of directories and files.
+     * @see destroyDirOrFile`
+     */
     destroyDirOrFiles(dirOrFiles) {
       assert('directories and files provided', dirOrFiles);
       dirOrFiles.forEach((dirOrFile) => {
