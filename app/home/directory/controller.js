@@ -1,19 +1,10 @@
 import Ember from 'ember';
-import DS from 'ember-data';
-
-const {
-  PromiseObject
-} = DS;
 
 const {
   Controller,
-  $,
   assert,
   computed,
   observer,
-  run: {
-    scheduleOnce,
-  },
   A,
 } = Ember;
 
