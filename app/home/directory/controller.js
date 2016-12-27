@@ -31,6 +31,24 @@ export default Controller.extend({
    */
   isLoading: computed.notEmpty('pendingDirectories'),
 
+  _createNewDirectory(directoryName) {
+    assert('directoryName is string', typeof directoryName === 'string');
+    const newDirectory = this.store.createRecord('directory', {
+      name: directoryName,
+      parent: this.get('model'),
+    });
+    return newDirectory.save()
+      .then(() => {
+        // Set the current (and only) selected item to the
+        // newly created directory
+        this.send('setSelectedDirOrFile', newDirectory);
+      })
+      .catch((err) => {
+        newDirectory.destroyRecord();
+        throw err;
+      });
+  },
+
   /**
    * If we change directories, drop our selected item.
    */
@@ -52,20 +70,15 @@ export default Controller.extend({
     },
 
     createNewDirectory(directoryName) {
-      assert('directoryName is string', typeof directoryName === 'string');
-      const newDirectory = this.store.createRecord('directory', {
-        name: directoryName,
-        parent: this.get('model'),
-      });
-      newDirectory.save()
+      this._createNewDirectory(directoryName)
+        .catch(() => { });
+    },
+    createNewDirectoryFromInput() {
+      this._createNewDirectory(this.get('newDirOrFileNameText'))
         .then(() => {
-          // Set the current (and only) selected item to the
-          // newly created directory
-          this.send('setSelectedDirOrFile', newDirectory);
+          this.set('newDirOrFileNameText', '');
         })
-        .catch(() => {
-          newDirectory.destroyRecord();
-        });
+        .catch(() => { });
     },
 
     destroyDirOrFile(dirOrFile) {
