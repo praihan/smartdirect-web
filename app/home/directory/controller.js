@@ -14,13 +14,14 @@ const {
   run: {
     scheduleOnce,
   },
+  A,
 } = Ember;
 
 export default Controller.extend({
   /**
-   * The selected directory or file.
+   * The list of selected directories and files.
    */
-  selectedDirOrFile: null,
+  selectedDirOrFiles: A(),
   /**
    * A binding to the text input for the name of a new file/directory.
    */
@@ -43,12 +44,20 @@ export default Controller.extend({
    * If we change directories, drop our selected item.
    */
   _unselectOnModelChange: observer('model', function() {
-    this.set('selectedDirOrFile', null);
+    this.send('clearSelectedDirOrFiles');
   }),
 
   actions: {
+    addSelectedDirOrFile(dirOrFile) {
+      Ember.assert('directory or file provided', dirOrFile);
+      this.get('selectedDirOrFiles').pushObject(dirOrFile);
+    },
+    clearSelectedDirOrFiles() {
+      this.get('selectedDirOrFiles').clear();
+    },
     setSelectedDirOrFile(dirOrFile) {
-      this.set('selectedDirOrFile', dirOrFile);
+      this.send('clearSelectedDirOrFiles');
+      this.send('addSelectedDirOrFile', dirOrFile);
     },
 
     createNewDirectory(directoryName) {
@@ -59,10 +68,12 @@ export default Controller.extend({
       });
       newDirectory.save()
         .then(() => {
+          // Set the current (and only) selected item to the
+          // newly created directory
           this.send('setSelectedDirOrFile', newDirectory);
         })
         .catch(() => {
-          newDirectory.destroyRecord()
+          newDirectory.destroyRecord();
         });
     },
 
@@ -74,13 +85,17 @@ export default Controller.extend({
           // selected any more.
           // Note that this will happen only after the backend
           // verifies that it's gone.
-          if (this.get('selectedDirOrFile') == dirOrFile) {
-            this.set('selectedDirOrFile', null);
-          }
+          this.get('selectedDirOrFiles').removeObject(dirOrFile);
         })
         .catch(() => {
           dirOrFile.rollback();
         });
+    },
+    destroyDirOrFiles(dirOrFiles) {
+      assert('directories and files provided', dirOrFiles);
+      dirOrFiles.forEach((dirOrFile) => {
+        this.send('destroyDirOrFile', dirOrFile);
+      });
     }
   }
 });

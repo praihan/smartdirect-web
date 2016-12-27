@@ -1,14 +1,14 @@
 <div class="ui main container">
 
   {{! Create a breadcrumb to access all parent directories from the top }}
-  <div class="ui breadcrumb">
+  <div class='ui breadcrumb'>
     {{#each model.ancestors.content as |ancestor|}}
       {{! Add a breadcrumb link to each ancestor }}
       {{#link-to 'home.directory' ancestor class='section'}}
         {{format-directory-name ancestor.name}}
       {{/link-to}}
       {{! Add a divider between each ancestor }}
-      <i class="right angle icon divider"></i>
+      <i class='right angle icon divider'></i>
     {{/each}}
     {{! Current directory is last breadcrumb }}
     <h4 class='section'>
@@ -21,12 +21,12 @@
       <div class='ui loader'></div>
     </div>
     <div class='ui top attached mini menu'>
-      {{#if selectedDirOrFile}}
+      {{#if selectedDirOrFiles}}
         <a href='#' class='ui item'>
           <i class='write icon'></i>
           Rename
         </a>
-        <a {{action 'destroyDirOrFile' selectedDirOrFile}} class='ui item'>
+        <a {{action 'destroyDirOrFiles' selectedDirOrFiles}} class='ui item'>
           <i class='trash icon'></i>
           Delete
         </a>
@@ -59,7 +59,7 @@
           <tr
             data-id='{{child.id}}'
             class='table-entry directory-entry
-              {{if selectedDirOrFile (if (eq selectedDirOrFile child) 'active')}}'
+              {{if (array-contains selectedDirOrFiles child) 'active'}}'
             {{action 'setSelectedDirOrFile' child }}
           >
             {{! Name }}
