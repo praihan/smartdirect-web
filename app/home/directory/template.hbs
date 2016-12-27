@@ -57,7 +57,6 @@
         {{#each model.children as |child|}}
         {{#unless child.isNew}}
           <tr
-            data-id='{{child.id}}'
             class='table-entry directory-entry
               {{if (array-contains selectedDirOrFiles child) 'active'}}'
             {{action 'setSelectedDirOrFile' child }}
