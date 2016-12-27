@@ -22,8 +22,8 @@ export default Controller.extend({
    * An array of child directories that have not been saved to the backend
    * by our adapter yet.
    */
-  pendingDirectories: computed('model.children.@each.isNew', function() {
-    return this.get('model.children').filterBy('isNew');
+  pendingDirectories: computed('model.children.@each.isSaving', function() {
+    return this.get('model.children').filterBy('isSaving');
   }),
   /**
    * Loading state is if we have any pending directories or files that need
