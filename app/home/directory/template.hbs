@@ -32,15 +32,22 @@
         </a>
       {{/if}}
       <div class='right menu'>
-        <div class='ui category item'>
+        <div class='ui item'>
           <div class='ui transparent input'>
           {{input class='prompt' type='text' value=newDirOrFileNameText placeholder='Name'}}
           </div>
         </div>
-        <a href='#' class='ui item'>
+        {{!
+          Using closure actions we need to prevent firing it if "button" is disabled.
+          Note that we are using anchors because buttons look very ugly as a menu item.
+        }}
+        <a class='ui icon item {{if (eq newDirOrFileNameText '') 'disabled'}}'>
           <i class='file icon'></i>
         </a>
-        <a class='ui item' {{action 'createNewDirectoryFromInput'}}>
+        <a
+          class='ui icon item {{if (eq newDirOrFileNameText '') 'disabled'}}'
+          onclick={{unless (eq newDirOrFileNameText '') (action 'createNewDirectoryFromInput')}}
+        >
           <i class='folder icon'></i>
         </a>
       </div>
