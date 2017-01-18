@@ -1,15 +1,9 @@
 <div class="ui main container">
 
   {{! Conditionally show an error messages }}
-  {{#if errorShown}}
-    <div class="ui negative message">
-      <i class="close icon" {{action 'hideError'}} ></i>
-      <div class="header">
-        {{errorTitle}}
-      </div>
-      <p>{{errorBody}}</p>
-    </div>
-  {{/if}}
+  {{#each errors as |error|}}
+    {{component error.componentName onClose=(action 'hideError') errorData=error.data}}
+  {{/each}}
 
   {{! Create a breadcrumb to access all parent directories from the top }}
   <div class='ui breadcrumb'>

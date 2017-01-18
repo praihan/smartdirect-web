@@ -30,18 +30,15 @@ export default Controller.extend({
    * updating on the backend.
    */
   isLoading: computed.notEmpty('pendingDirectories'),
+
   /**
-   * The title of the error message (a short one liner).
+   * An array of objects of the following format.
+   * {
+   *   componentName: string, // the name of the component to render with.
+   *   data: Object, // the JSONAPI error data object that caused this error.
+   * }
    */
-  errorTitle: '',
-  /**
-   * The body of the error message to show (detailed string).
-   */
-  errorBody: '',
-  /**
-   * A boolean determining if an error is shown.
-   */
-  errorShown: false,
+  errors: A([]), 
 
   /**
    * Create a new directory with the given name and set it selected.
@@ -57,7 +54,7 @@ export default Controller.extend({
       .then(() => {
         // Set the current (and only) selected item to the
         // newly created directory
-        this.send('setSelectedDirOrFile', newDirectory);
+        this._setSelectedDirOrFile(newDirectory);
         return newDirectory;
       })
       .catch((err) => {
@@ -65,12 +62,93 @@ export default Controller.extend({
         throw err;
       });
   },
+  /**
+   * Creates a new directory from the user-visible input text.
+   */
+  _createNewDirectoryFromInput() {
+    this._createNewDirectory(this.get('newDirOrFileNameText'))
+      .then(() => {
+        this.set('newDirOrFileNameText', '');
+      })
+      .catch((err) => {
+        const errors = this.get('errors');
+        const errorData = (err.errors || []).forEach((apiError) => {
+          const errorCode = apiError.code;
+          const errorSource = apiError.source.pointer;
+          // determine the appropriate component to display the error. Fallback
+          // to a generic error.
+          let errorMessageComponentName = 'errors/generic-error';
+          if (errorCode === 'VALIDATION_ERROR' && errorSource === '/data/attributes/name') {
+            // name validation failed, set the appropriate error data.
+            errorMessageComponentName = 'errors/invalid-directory-name';
+          }
+          // pop out a new error.
+          errors.pushObject({ componentName: errorMessageComponentName, data: apiError });
+        });
+      });
+  },
+  
+  /**
+   * Clears the selectedDirOrFiles array.
+   */
+  _clearSelectedDirOrFiles() {
+    this.get('selectedDirOrFiles').clear();
+  },
+  /**
+   * Add a directory to file to the selected array.
+   */
+  _addSelectedDirOrFile(dirOrFile) {
+    Ember.assert('directory or file provided', dirOrFile);
+    this.get('selectedDirOrFiles').pushObject(dirOrFile);
+  },
+  /**
+   * Destroy the given directory or file from the store.
+   */
+  _destroyDirOrFile(dirOrFile) {
+    assert('directory or file provided', dirOrFile);
+    return dirOrFile.destroyRecord()
+      .then(() => {
+        // if we destroy our selected one, it can't be
+        // selected any more.
+        // Note that this will happen only after the backend
+        // verifies that it's gone.
+        this.get('selectedDirOrFiles').removeObject(dirOrFile);
+      })
+      .catch((err) => {
+        dirOrFile.rollback();
+        throw err;
+      });
+  },
+  _destroyDirOrFiles(dirOrFiles) {
+    assert('directories and files provided', dirOrFiles);
+    dirOrFiles.forEach((dirOrFile) => {
+      this._destroyDirOrFile(dirOrFile);
+    });
+  },
+
+  /**
+   * Hide an error given the displayed error component.
+   */
+  _hideError(component) {
+    Ember.assert('component is given with onClose callback', component);
+    const componentErrorData = component.get('errorData');
+    Ember.assert('errorData is attached with given component', componentErrorData);
+
+    // find the error object with matching errorData. We do this with a strict
+    // identity check. Then, remove it.
+    const errors = this.get('errors');
+    const errorMatch = errors.find((error) => {
+      return error.data === componentErrorData;
+    });
+    Ember.assert('found a matching errorData for the component', errorMatch);
+    errors.removeObject(errorMatch);
+  },
 
   /**
    * If we change directories, drop our selected item.
    */
   _unselectOnModelChange: observer('model', function() {
-    this.send('clearSelectedDirOrFiles');
+    this._clearSelectedDirOrFiles();
   }),
 
   actions: {
@@ -78,21 +156,20 @@ export default Controller.extend({
      * Add a directory or file to the list of selected ones.
      */
     addSelectedDirOrFile(dirOrFile) {
-      Ember.assert('directory or file provided', dirOrFile);
-      this.get('selectedDirOrFiles').pushObject(dirOrFile);
+      this._addSelectedDirOrFile(dirOrFile);
     },
     /**
      * Deselect all selected directories and files.
      */
     clearSelectedDirOrFiles() {
-      this.get('selectedDirOrFiles').clear();
+      this._clearSelectedDirOrFiles();
     },
     /**
      * Select a directory or file and deselect everything else.
      */
     setSelectedDirOrFile(dirOrFile) {
-      this.send('clearSelectedDirOrFiles');
-      this.send('addSelectedDirOrFile', dirOrFile);
+      this._clearSelectedDirOrFiles();
+      this._addSelectedDirOrFile(dirOrFile);
     },
 
     /**
@@ -106,63 +183,28 @@ export default Controller.extend({
      * Create a new directory from the user-visible input text.
      */
     createNewDirectoryFromInput() {
-      this._createNewDirectory(this.get('newDirOrFileNameText'))
-        .then(() => {
-          this.set('newDirOrFileNameText', '');
-        })
-        .catch((err) => {
-          const errorData = (err.errors || []).map((apiError) => {
-            const errorCode = apiError.code;
-            const errorSource = apiError.source.pointer;
-            if (errorCode === 'VALIDATION_ERROR' && errorSource === '/data/attributes/name') {
-              // name validation failed, set the appropriate error data.
-              this.set('errorTitle', 'That directory name is invalid!'),
-              this.set('errorBody', 'Please enter a valid name.');
-            } else {
-              // we have exhausted all known errors. Show a generic message.
-              this.set('errorTitle', 'An unknown error occured when creating a directory!');
-              this.set('errorBody', 'Please contact support.');
-            }
-            // pop out an error if not visible already. If an error is already there, the new details
-            // will be hot-swapped in
-            this.set('errorShown', true);
-          });
-        });
+      this._createNewDirectoryFromInput();
     },
 
     /**
      * Destroy the given directory or file from the store.
      */
     destroyDirOrFile(dirOrFile) {
-      assert('directory or file provided', dirOrFile);
-      dirOrFile.destroyRecord()
-        .then(() => {
-          // if we destroy our selected one, it can't be
-          // selected any more.
-          // Note that this will happen only after the backend
-          // verifies that it's gone.
-          this.get('selectedDirOrFiles').removeObject(dirOrFile);
-        })
-        .catch(() => {
-          dirOrFile.rollback();
-        });
+      this._destroyDirOrFile(dirOrFile);
     },
     /**
      * Destroy a list of directories and files.
-     * @see destroyDirOrFile`
+     * @see destroyDirOrFile
      */
     destroyDirOrFiles(dirOrFiles) {
-      assert('directories and files provided', dirOrFiles);
-      dirOrFiles.forEach((dirOrFile) => {
-        this.send('destroyDirOrFile', dirOrFile);
-      });
+      this._destroyDirOrFile(dirOrFiles);
     },
 
     /**
      * Hide the error message if one is shown.
      */
-    hideError() {
-      this.set('errorShown', false);
+    hideError(component) {
+      this._hideError(component);
     },
   }
 });
