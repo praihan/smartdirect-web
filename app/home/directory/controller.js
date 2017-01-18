@@ -30,6 +30,18 @@ export default Controller.extend({
    * updating on the backend.
    */
   isLoading: computed.notEmpty('pendingDirectories'),
+  /**
+   * The title of the error message (a short one liner).
+   */
+  errorTitle: '',
+  /**
+   * The body of the error message to show (detailed string).
+   */
+  errorBody: '',
+  /**
+   * A boolean determining if an error is shown.
+   */
+  errorShown: false,
 
   /**
    * Create a new directory with the given name and set it selected.
@@ -98,7 +110,24 @@ export default Controller.extend({
         .then(() => {
           this.set('newDirOrFileNameText', '');
         })
-        .catch(() => { });
+        .catch((err) => {
+          const errorData = (err.errors || []).map((apiError) => {
+            const errorCode = apiError.code;
+            const errorSource = apiError.source.pointer;
+            if (errorCode === 'VALIDATION_ERROR' && errorSource === '/data/attributes/name') {
+              // name validation failed, set the appropriate error data.
+              this.set('errorTitle', 'That directory name is invalid!'),
+              this.set('errorBody', 'Please enter a valid name.');
+            } else {
+              // we have exhausted all known errors. Show a generic message.
+              this.set('errorTitle', 'An unknown error occured when creating a directory!');
+              this.set('errorBody', 'Please contact support.');
+            }
+            // pop out an error if not visible already. If an error is already there, the new details
+            // will be hot-swapped in
+            this.set('errorShown', true);
+          });
+        });
     },
 
     /**
@@ -127,6 +156,13 @@ export default Controller.extend({
       dirOrFiles.forEach((dirOrFile) => {
         this.send('destroyDirOrFile', dirOrFile);
       });
-    }
+    },
+
+    /**
+     * Hide the error message if one is shown.
+     */
+    hideError() {
+      this.set('errorShown', false);
+    },
   }
 });
