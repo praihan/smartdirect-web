@@ -54,7 +54,8 @@ export default Controller.extend({
       .then(() => {
         // Set the current (and only) selected item to the
         // newly created directory
-        this._setSelectedDirOrFile(newDirectory);
+        this._clearSelectedDirOrFiles();
+        this._addSelectedDirOrFile(newDirectory);
         return newDirectory;
       })
       .catch((err) => {
@@ -72,7 +73,7 @@ export default Controller.extend({
       })
       .catch((err) => {
         const errors = this.get('errors');
-        const errorData = (err.errors || []).forEach((apiError) => {
+        (err.errors || []).forEach((apiError) => {
           const errorCode = apiError.code;
           const errorSource = apiError.source.pointer;
           // determine the appropriate component to display the error. Fallback
@@ -173,13 +174,6 @@ export default Controller.extend({
     },
 
     /**
-     * Create a new directory with the given name.
-     */
-    createNewDirectory(directoryName) {
-      this._createNewDirectory(directoryName)
-        .catch(() => { });
-    },
-    /**
      * Create a new directory from the user-visible input text.
      */
     createNewDirectoryFromInput() {
@@ -197,7 +191,7 @@ export default Controller.extend({
      * @see destroyDirOrFile
      */
     destroyDirOrFiles(dirOrFiles) {
-      this._destroyDirOrFile(dirOrFiles);
+      this._destroyDirOrFiles(dirOrFiles);
     },
 
     /**
