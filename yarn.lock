@@ -1759,12 +1759,12 @@ ember-cli@2.10.0:
     walk-sync "^0.3.0"
     yam "0.0.22"
 
-ember-cookies@^0.0.10:
-  version "0.0.10"
-  resolved "https://registry.yarnpkg.com/ember-cookies/-/ember-cookies-0.0.10.tgz#ffd74cf03b4cdea27f5a17601b1c98cf4cb673d3"
+ember-cookies@^0.0.11:
+  version "0.0.11"
+  resolved "https://registry.yarnpkg.com/ember-cookies/-/ember-cookies-0.0.11.tgz#6f6a070255e943d26fa5f332921a2bbca04d5a07"
   dependencies:
     ember-cli-babel "^5.1.6"
-    ember-getowner-polyfill "~1.0.1"
+    ember-getowner-polyfill "~1.1.1"
 
 ember-data@^2.10.0:
   version "2.10.0"
@@ -1800,18 +1800,12 @@ ember-export-application-global@^1.0.5:
   dependencies:
     ember-cli-babel "^5.1.10"
 
-ember-getowner-polyfill@^1.0.1:
+ember-getowner-polyfill@^1.1.0, ember-getowner-polyfill@~1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/ember-getowner-polyfill/-/ember-getowner-polyfill-1.1.1.tgz#6bb6603827dd2f8f33be2434570a86cc9e5273ff"
   dependencies:
     ember-cli-babel "^5.1.6"
     ember-cli-version-checker "^1.2.0"
-
-ember-getowner-polyfill@~1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/ember-getowner-polyfill/-/ember-getowner-polyfill-1.0.1.tgz#f60a31d25d642461dac4b4746184afaf7f5084ae"
-  dependencies:
-    ember-cli-babel "^5.1.5"
 
 ember-inflector@^1.9.4:
   version "1.9.6"
@@ -1868,22 +1862,22 @@ ember-runtime-enumerable-includes-polyfill@^1.0.0, ember-runtime-enumerable-incl
     ember-cli-version-checker "^1.1.6"
 
 "ember-simple-auth-auth0@https://github.com/prshreshtha/ember-simple-auth-auth0":
-  version "2.1.4"
-  resolved "https://github.com/prshreshtha/ember-simple-auth-auth0#95605706dc999571b1b5204e83ef6e85373f1f64"
+  version "2.2.1"
+  resolved "https://github.com/prshreshtha/ember-simple-auth-auth0#bb5dcf220bbeca2c42135b9944afad120a271162"
   dependencies:
-    ember-cli-babel "^5.1.6"
-    ember-simple-auth "1.2.0-beta.1"
+    ember-cli-babel "^5.1.7"
+    ember-simple-auth "^1.2.0"
     rsvp "^3.3.3"
 
-ember-simple-auth@1.2.0-beta.1:
-  version "1.2.0-beta.1"
-  resolved "https://registry.yarnpkg.com/ember-simple-auth/-/ember-simple-auth-1.2.0-beta.1.tgz#7188fd59e4d077dcfa660990fce555755dc75880"
+ember-simple-auth@1.2.0, ember-simple-auth@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/ember-simple-auth/-/ember-simple-auth-1.2.0.tgz#6275c1580ab17aad303d51723515f3b933fb4635"
   dependencies:
-    ember-cli-babel "^5.1.6"
+    ember-cli-babel "^5.1.7"
     ember-cli-import-polyfill "^0.2.0"
     ember-cli-is-package-missing "^1.0.0"
-    ember-cookies "^0.0.10"
-    ember-getowner-polyfill "^1.0.1"
+    ember-cookies "^0.0.11"
+    ember-getowner-polyfill "^1.1.0"
     ember-network "^0.3.0"
     silent-error "^1.0.0"
 
