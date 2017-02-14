@@ -1,8 +1,8 @@
-<div class="ui fixed borderless menu">
-<div class="ui container">
+<div class='ui fixed borderless menu'>
+<div class='ui container'>
 
   {{! On the left we have the product icon + name }}
-  <a class="header item" href="#">
+  <a class='header item' href='#'>
     Smartdirect
   </a>
 
@@ -11,12 +11,12 @@
       On the right we have a dropdown with their given name.
       They can access all the different settings here.
     }}
-    {{#ui-dropdown class="item right"}}
+    {{#ui-dropdown class='item right'}}
       {{profile.givenName}}
 
-      <i class="dropdown icon"></i>
-      <div class="menu">
-        <a class="item" href="#" {{action 'logout'}}>Logout</a>
+      <i class='dropdown icon'></i>
+      <div class='menu'>
+        <a class='item' href='#' {{action 'logout'}}>Logout</a>
       </div>
     {{/ui-dropdown}}
   {{else}}
@@ -24,8 +24,8 @@
       If we aren't logged in, then make it clear with a colored button
       that they should log in
     }}
-    <div class="item right">
-    <button class="ui blue button" href="#" {{action 'login'}}>
+    <div class='item right'>
+    <button class='ui blue button' href='#' {{action 'login'}}>
       Login
     </button>
     </div>
@@ -34,11 +34,13 @@
 </div>
 </div>
 
+{{#ember-notify classPrefix='custom-notify' as |message close|}}
+  {{! TODO: Use message.type to determine class }}
+  <div class='ui negative message close' {{action close}}>
+    <span>{{message.text}}</span>
+  </div>
+{{/ember-notify}}
+
 <main>
   {{outlet}}
 </main>
-
-{{#ember-notify as |message close|}}
-  <a {{action close}} class='close'>close from block</a>
-  <span class='message-from-block'>{{message.text}}</span>
-{{/ember-notify}}

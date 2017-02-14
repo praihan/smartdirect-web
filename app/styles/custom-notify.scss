@@ -1,0 +1,64 @@
+// Adapted from the offical ember-notify repo
+
+.custom-notify {
+  $width: 300px;
+
+  &.ember-notify-cn {
+    position: fixed;
+    z-index: 5000;
+    bottom: 0px;
+    right: 0px;
+  }
+
+  & .ember-notify {
+    position: relative;
+    display: block;
+    margin: .5em;
+    min-width: $width;
+  }
+
+  & .ember-notify-show {
+    animation-duration: 500ms;
+    animation-name: notify-show;
+    animation-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.275);
+  }
+
+  & .ember-notify-hide {
+    animation-duration: 250ms;
+    animation-name: notify-hide;
+    animation-timing-function: cubic-bezier(0.600, -0.280, 0.735, 0.045);
+  }
+
+  & .close {
+    cursor: pointer;
+  }
+
+  @keyframes notify-show {
+    from {
+      right: -$width - 10px;
+    }
+    to {
+      right: 0;
+    }
+  }
+  @keyframes notify-hide {
+    from {
+      right: 0;
+    }
+    to {
+      right: -$width - 10px;
+    }
+  }
+
+  @media only screen and (max-width: 680px) {
+    &.ember-notify-cn {
+      width: 100%;
+      padding-left: 20px;
+      box-sizing: border-box;
+    }
+    & .ember-notify {
+      width: 100%;
+      float: right;
+    }
+  }
+}
