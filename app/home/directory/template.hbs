@@ -1,10 +1,5 @@
 <div class="ui main container">
 
-  {{! Conditionally show an error messages }}
-  {{#each errors as |error|}}
-    {{component error.componentName onClose=(action 'hideError') errorData=error.data}}
-  {{/each}}
-
   {{! Create a breadcrumb to access all parent directories from the top }}
   <div class='ui breadcrumb'>
     {{#each model.ancestors.content as |ancestor|}}
@@ -21,7 +16,7 @@
     </h4>
   </div>
 
-  <div class='dimmable'>
+  <div class='ui dimmable container'>
     <div class='ui inverted dimmer {{if isLoading 'active' }}'>
       <div class='ui loader'></div>
     </div>

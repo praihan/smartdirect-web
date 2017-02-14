@@ -1,14 +1,31 @@
 import Ember from 'ember';
 
+import genericErrorNotifier from '../../notifications/errors/generic-error';
+import invalidDirectoryNameNotifier from '../../notifications/errors/invalid-directory-name';
+
 const {
   Controller,
   assert,
   computed,
   observer,
   A,
+  getOwner,
+  inject: {
+    service,
+  },
 } = Ember;
 
+const errorNotifiers = {
+  'generic-error': genericErrorNotifier,
+  'invalid-directory-name': invalidDirectoryNameNotifier,
+};
+
 export default Controller.extend({
+  /**
+   * The ember-notify service.
+   */
+  notify: service(),
+
   /**
    * The list of selected directories and files.
    */
@@ -30,15 +47,6 @@ export default Controller.extend({
    * updating on the backend.
    */
   isLoading: computed.notEmpty('pendingDirectories'),
-
-  /**
-   * An array of objects of the following format.
-   * {
-   *   componentName: string, // the name of the component to render with.
-   *   data: Object, // the JSONAPI error data object that caused this error.
-   * }
-   */
-  errors: A([]), 
 
   /**
    * Create a new directory with the given name and set it selected.
@@ -72,19 +80,18 @@ export default Controller.extend({
         this.set('newDirOrFileNameText', '');
       })
       .catch((err) => {
-        const errors = this.get('errors');
         (err.errors || []).forEach((apiError) => {
           const errorCode = apiError.code;
           const errorSource = apiError.source.pointer;
           // determine the appropriate component to display the error. Fallback
           // to a generic error.
-          let errorMessageComponentName = 'errors/generic-error';
+          let errorType = 'generic-error';
           if (errorCode === 'VALIDATION_ERROR' && errorSource === '/data/attributes/name') {
             // name validation failed, set the appropriate error data.
-            errorMessageComponentName = 'errors/invalid-directory-name';
+            errorType = 'invalid-directory-name';
           }
           // pop out a new error.
-          errors.pushObject({ componentName: errorMessageComponentName, data: apiError });
+          this._notifyError(errorType, apiError);
         });
       });
   },
@@ -128,21 +135,11 @@ export default Controller.extend({
   },
 
   /**
-   * Hide an error given the displayed error component.
+   * notifies an error given the name and error data.
    */
-  _hideError(component) {
-    Ember.assert('component is given with onClose callback', component);
-    const componentErrorData = component.get('errorData');
-    Ember.assert('errorData is attached with given component', componentErrorData);
-
-    // find the error object with matching errorData. We do this with a strict
-    // identity check. Then, remove it.
-    const errors = this.get('errors');
-    const errorMatch = errors.find((error) => {
-      return error.data === componentErrorData;
-    });
-    Ember.assert('found a matching errorData for the component', errorMatch);
-    errors.removeObject(errorMatch);
+  _notifyError(name, errorData) {
+    assert('error name is valid', errorNotifiers[name] != null);
+    errorNotifiers[name](getOwner(this), this.get('notify'), errorData);
   },
 
   /**
@@ -192,13 +189,6 @@ export default Controller.extend({
      */
     destroyDirOrFiles(dirOrFiles) {
       this._destroyDirOrFiles(dirOrFiles);
-    },
-
-    /**
-     * Hide the error message if one is shown.
-     */
-    hideError(component) {
-      this._hideError(component);
     },
   }
 });

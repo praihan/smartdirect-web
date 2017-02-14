@@ -34,4 +34,11 @@
 </div>
 </div>
 
-{{outlet}}
+<main>
+  {{outlet}}
+</main>
+
+{{#ember-notify as |message close|}}
+  <a {{action close}} class='close'>close from block</a>
+  <span class='message-from-block'>{{message.text}}</span>
+{{/ember-notify}}
