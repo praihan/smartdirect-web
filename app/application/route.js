@@ -3,7 +3,7 @@ import ApplicationRouteMixin from '../mixins/application-route-mixin';
 
 const {
   Route,
-  merge, copy,
+  assign, copy,
   inject: {
     service,
   },
@@ -25,7 +25,7 @@ export default Route.extend(ApplicationRouteMixin, {
 
   actions: {
     login(extraOpts) {
-      const lockOptions = merge(
+      const lockOptions = assign(
         copy(DEFAULT_LOCK_OPTS, true), // make a deep copy of defaults
         extraOpts
       );
