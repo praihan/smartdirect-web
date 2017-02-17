@@ -2,9 +2,9 @@
 <div class='ui container'>
 
   {{! On the left we have the product icon + name }}
-  <a class='header item' href='#'>
+  {{#link-to 'index' class='header item' activeClass=''}}
     Smartdirect
-  </a>
+  {{/link-to}}
 
   {{#if session.isAuthenticated}}
     {{!
