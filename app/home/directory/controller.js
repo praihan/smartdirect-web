@@ -142,13 +142,6 @@ export default Controller.extend({
     errorNotifiers[name](getOwner(this), this.get('notify'), errorData);
   },
 
-  /**
-   * If we change directories, drop our selected item.
-   */
-  _unselectOnModelChange: observer('model', function() {
-    this._clearSelectedDirOrFiles();
-  }),
-
   actions: {
     /**
      * Add a directory or file to the list of selected ones.

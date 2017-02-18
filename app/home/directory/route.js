@@ -7,4 +7,9 @@ const {
 
 export default Route.extend(AuthenticatedRouteMixin, {
   authenticationRoute: 'login',
+
+  setupController(controller) {
+    this._super(...arguments);
+    controller._clearSelectedDirOrFiles();
+  },
 });
