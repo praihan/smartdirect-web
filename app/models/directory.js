@@ -1,47 +1,21 @@
-import Ember from 'ember';
 import DS from 'ember-data';
 
 const {
-  computed,
-} = Ember;
-
-const {
   Model,
-  PromiseObject,
   attr,
   belongsTo,
   hasMany,
 } = DS;
 
 export default Model.extend({
-  user: belongsTo('user'),
+  user: belongsTo('user', { readOnly: true }),
   name: attr('string'),
 
   parent: belongsTo('directory', { inverse: 'children', async: true, }),
-  children: hasMany('directory', { inverse: 'parent', async: true, }),
+  children: hasMany('directory', { inverse: 'parent', async: true, readOnly: true, }),
 
   createdAt: attr('date', { readOnly: true }),
   updatedAt: attr('date', { readOnly: true }),
 
-  ancestors: computed('', function() {
-    const promise = this.get('parent').then(parent => {
-      // base case: root Directory
-      if (parent == null) {
-        return [];
-      }
-      // recursively get the parent's ancestors and tack
-      // the parent on
-      return parent.get('ancestors').then(parentsAncestors => {
-        return [
-          ...parentsAncestors,
-          parent
-        ];
-      });
-    });
-
-    // return a DS promise
-    return PromiseObject.create({
-      promise,
-    });
-  }),
+  ancestors: hasMany('directory', { inverse: null, async: true, readOnly: true, }),
 });

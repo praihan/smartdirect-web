@@ -2,7 +2,7 @@
 
   {{! Create a breadcrumb to access all parent directories from the top }}
   <div class='ui breadcrumb'>
-    {{#each model.ancestors.content as |ancestor|}}
+    {{#each (reverse model.ancestors.content) as |ancestor|}}
       {{! Add a breadcrumb link to each ancestor }}
       {{#link-to 'home.directory' ancestor class='section'}}
         {{format-directory-name ancestor.name}}
@@ -11,9 +11,11 @@
       <i class='right angle icon divider'></i>
     {{/each}}
     {{! Current directory is last breadcrumb }}
-    <h4 class='section'>
-      {{format-directory-name model.name}}
-    </h4>
+    {{#if model.ancestors.isFulfilled}}
+      <h4 class='section'>
+        {{format-directory-name model.name}}
+      </h4>
+    {{/if}}
   </div>
 
   <div class='ui dimmable container'>

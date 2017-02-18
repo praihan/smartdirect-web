@@ -10,6 +10,20 @@ export default JSONAPISerializer.extend({
     if (attribute['options'] && attribute['options']['readOnly']) {
       return;
     }
-    this._super(...arguments);
+    return this._super(...arguments);
+  },
+  serializeHasMany(snapshot, json, relationship) {
+    // do not serialize the relationship!
+    if (relationship['options'] && relationship['options']['readOnly']) {
+      return;
+    }
+    return this._super(...arguments);
+  },
+  serializeBelongsTo(snapshot, json, relationship) {
+    // do not serialize the relationship!
+    if (relationship['options'] && relationship['options']['readOnly']) {
+      return;
+    }
+    return this._super(...arguments);
   },
 });
