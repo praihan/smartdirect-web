@@ -7,11 +7,13 @@ const {
 } = DS;
 
 export default Model.extend({
-  name: attr('string'),
-  email: attr('string'),
+  name: attr('string', { readOnly: true }),
+  email: attr('string', { readOnly: true }),
 
-  oauthProvider: attr('string'),
-  oauthId: attr('string'),
+  oauthProvider: attr('string', { readOnly: true }),
+  oauthId: attr('string', { readOnly: true }),
 
-  directory: belongsTo('directory', { async: true }),
+  friendlyName: attr('string'),
+
+  directory: belongsTo('directory', { readOnly: true, async: true }),
 });

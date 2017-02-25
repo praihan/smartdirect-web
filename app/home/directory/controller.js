@@ -7,7 +7,6 @@ const {
   Controller,
   assert,
   computed,
-  observer,
   A,
   getOwner,
   inject: {
