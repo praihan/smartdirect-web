@@ -2,13 +2,14 @@
 
   {{! Create a breadcrumb to access all parent directories from the top }}
   <ol class='breadcrumb'>
+    {{! We put an empty non-breaking no-width space here to avoid awkward resizing }}
+    <span class='invisible'>&#x200b;</span>
     {{#each (reverse model.ancestors.content) as |ancestor|}}
       <li>
         {{! Add a breadcrumb link to each ancestor }}
         {{#link-to 'home.directory' ancestor class='section'}}
           {{format-directory-name ancestor.name}}
         {{/link-to}}
-        {{! Add a divider between each ancestor }}
       </li>
     {{/each}}
     {{! Current directory is last breadcrumb }}
