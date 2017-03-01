@@ -1,38 +1,47 @@
-<div class='ui fixed borderless menu'>
-<div class='ui container'>
+{{#bs-navbar type='inverse' as |navbar|}}
 
   {{! On the left we have the product icon + name }}
-  {{#link-to 'index' class='header item' activeClass=''}}
-    Smartdirect
-  {{/link-to}}
+  <div class='navbar-header'>
+    {{navbar.toggle}}
+    {{#link-to 'index' class='navbar-brand' activeClass=''}}
+      Smartdirect
+    {{/link-to}}
+  </div>
 
-  {{#if session.isAuthenticated}}
-    {{!
-      On the right we have a dropdown with their given name.
-      They can access all the different settings here.
-    }}
-    {{#ui-dropdown class='item right'}}
-      {{profile.givenName}}
+  {{#navbar.content}}
 
-      <i class='dropdown icon'></i>
-      <div class='menu'>
-        <a class='item' href='#' {{action 'logout'}}>Logout</a>
-      </div>
-    {{/ui-dropdown}}
-  {{else}}
-    {{!
-      If we aren't logged in, then make it clear with a colored button
-      that they should log in
-    }}
-    <div class='item right'>
-    <button class='ui blue button' href='#' {{action 'login'}}>
-      Login
-    </button>
-    </div>
-  {{/if}}
+  {{#navbar.nav class='navbar-right' as |nav|}}
+    {{#if session.isAuthenticated}}
+      {{!
+        On the right we have a dropdown with their given name.
+        They can access all the different settings here.
+      }}
+      {{#nav.dropdown tagName='li' as |dropdown|}}
+        {{#dropdown.toggle}}
+          {{profile.givenName}} <span class='caret'></span>
+        {{/dropdown.toggle}}
+        {{#dropdown.menu as |menu|}}
+          {{#menu.item}}
+            <a href='#' {{action 'logout'}}>Logout</a>
+          {{/menu.item}}
+        {{/dropdown.menu}}
+      {{/nav.dropdown}}
+    {{else}}
+      {{!
+        If we aren't logged in, then make it clear with a colored button
+        that they should log in
+      }}
+      {{#nav.item class='navbar-btn'}}
+        {{#bs-button onClick=(action 'login')}}
+          Login
+        {{/bs-button}}
+      {{/nav.item}}
+    {{/if}}
+  {{/navbar.nav}}
 
-</div>
-</div>
+  {{/navbar.content}}
+
+{{/bs-navbar}}
 
 {{#ember-notify classPrefix='custom-notify' as |message close|}}
   {{! TODO: Use message.type to determine class }}

@@ -14,7 +14,7 @@ export default Route.extend(UnauthenticatedRouteMixin, {
     didTransition() {
       scheduleOnce('afterRender', this, function() {
         // after we render, we need to also render the inline login thing
-        this.send('login', { container: 'login-container' });
+        this.send('loginWithOptions', { container: 'login-container' });
       })
     }
   }
