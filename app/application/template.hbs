@@ -1,38 +1,11 @@
-<div class='ui fixed borderless menu'>
-<div class='ui container'>
-
-  {{! On the left we have the product icon + name }}
-  {{#link-to 'index' class='header item' activeClass=''}}
+{{#nav-bar as |nav|}}
+  {{#nav.header linkToRoute='index'}}
     Smartdirect
-  {{/link-to}}
-
-  {{#if session.isAuthenticated}}
-    {{!
-      On the right we have a dropdown with their given name.
-      They can access all the different settings here.
-    }}
-    {{#ui-dropdown class='item right'}}
-      {{profile.givenName}}
-
-      <i class='dropdown icon'></i>
-      <div class='menu'>
-        <a class='item' href='#' {{action 'logout'}}>Logout</a>
-      </div>
-    {{/ui-dropdown}}
-  {{else}}
-    {{!
-      If we aren't logged in, then make it clear with a colored button
-      that they should log in
-    }}
-    <div class='item right'>
-    <button class='ui blue button' href='#' {{action 'login'}}>
-      Login
-    </button>
-    </div>
-  {{/if}}
-
-</div>
-</div>
+  {{/nav.header}}
+  <div class='right menu'>
+    {{nav.menu onLogin=(route-action 'login') onLogout=(route-action 'logout')}}
+  </div>
+{{/nav-bar}}
 
 {{#ember-notify classPrefix='custom-notify' as |message close|}}
   {{! TODO: Use message.type to determine class }}

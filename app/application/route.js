@@ -13,9 +13,9 @@ const DEFAULT_LOCK_OPTS = {
   auth: {
     redirect: false,
     params: {
-      scope: 'openid email name'
-    }
-  }
+      scope: 'openid email name',
+    },
+  },
 };
 
 export default Route.extend(ApplicationRouteMixin, {

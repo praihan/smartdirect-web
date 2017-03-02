@@ -1,0 +1,23 @@
+{{#if session.isAuthenticated}}
+  {{!
+    On the right we have a dropdown with their given name.
+    They can access all the different settings here.
+  }}
+  {{#ui-dropdown class=(concat 'item ' class)}}
+    {{profile.givenName}}
+    <i class='dropdown icon'></i>
+    <div class='menu'>
+      <a class='item' href='#' onclick={{action 'logout'}}>Logout</a>
+    </div>
+  {{/ui-dropdown}}
+{{else}}
+  {{!
+    If we aren't logged in, then make it clear with a colored button
+    that they should log in
+  }}
+  <div class={{concat 'item ' class}}>
+    <button class='ui blue button' href='#' onclick={{action 'login'}}>
+      Login
+    </button>
+  </div>
+{{/if}}
