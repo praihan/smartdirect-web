@@ -37,7 +37,10 @@
       <div class='right menu'>
         {{#menu.item}}
           <div class='ui transparent input'>
-            {{input class='prompt' type='text' value=newDirOrFileNameText placeholder='Name'}}
+            {{one-way-input class='prompt' type='text' placeholder='Name'
+              value=newDirOrFileNameText
+              update=(action (mut newDirOrFileNameText))
+            }}
           </div>
         {{/menu.item}}
         {{#menu.item tagName='a'
