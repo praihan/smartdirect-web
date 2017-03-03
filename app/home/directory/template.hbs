@@ -23,14 +23,18 @@
       <div class='ui loader' />
     {{/browser.dimmer}}
     {{#browser.menu as |menu|}}
-      {{#menu.item tagName='a'}}
-        <i class='write icon' />
-        Rename
-      {{/menu.item}}
-      {{#menu.item tagName='a' click=(action 'destroyDirOrFiles' selectedDirOrFiles)}}
-        <i class='trash icon' />
-        Delete
-      {{/menu.item}}
+      {{#if (eq selectedDirOrFiles.length 1)}}
+        {{#menu.item tagName='a'}}
+          <i class='write icon' />
+          Rename
+        {{/menu.item}}
+      {{/if}}
+      {{#if (gt selectedDirOrFiles.length 0)}}
+        {{#menu.item tagName='a' click=(action 'destroyDirOrFiles' selectedDirOrFiles)}}
+          <i class='trash icon' />
+          Delete
+        {{/menu.item}}
+      {{/if}}
       {{!
         The right side of the menu is a separate menu
       }}
