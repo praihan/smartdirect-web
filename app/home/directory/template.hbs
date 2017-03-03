@@ -24,13 +24,13 @@
     {{/browser.dimmer}}
     {{#browser.menu as |menu|}}
       {{#if (eq selectedDirOrFiles.length 1)}}
-        {{#menu.item tagName='a'}}
+        {{#menu.item tagName='a' tabindex=0}}
           <i class='write icon' />
           Rename
         {{/menu.item}}
       {{/if}}
       {{#if (gt selectedDirOrFiles.length 0)}}
-        {{#menu.item tagName='a' click=(action 'destroyDirOrFiles' selectedDirOrFiles)}}
+        {{#menu.item tagName='a' tabindex=0 click=(action 'destroyDirOrFiles' selectedDirOrFiles)}}
           <i class='trash icon' />
           Delete
         {{/menu.item}}
@@ -47,12 +47,12 @@
             }}
           </div>
         {{/menu.item}}
-        {{#menu.item tagName='a'
+        {{#menu.item tagName='a' tabindex=(if (eq newDirOrFileNameText '') -1 0)
           class=(concat 'icon ' (if (eq newDirOrFileNameText '') 'disabled'))
         }}
           <i class='file icon' />
         {{/menu.item}}
-        {{#menu.item tagName='a'
+        {{#menu.item tagName='a' tabindex=(if (eq newDirOrFileNameText '') -1 0)
           class=(concat 'icon ' (if (eq newDirOrFileNameText '') 'disabled'))
           click=(unless (eq newDirOrFileNameText '') (action 'createNewDirectoryFromInput'))
         }}

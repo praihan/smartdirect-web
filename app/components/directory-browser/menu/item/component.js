@@ -10,5 +10,5 @@ const {
 
 export default Component.extend(EventForwardingComponentMixin, {
   classNames: w('ui item'),
-  attributeBindings: w('href'),
+  attributeBindings: w('href tabindex'),
 });
