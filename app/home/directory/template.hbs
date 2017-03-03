@@ -18,84 +18,80 @@
     {{/if}}
   </div>
 
-  <div class='ui dimmable container'>
-    <div class='ui inverted dimmer {{if isLoading 'active' }}'>
-      <div class='ui loader'></div>
-    </div>
-    <div class='ui top attached mini menu'>
-      {{#if selectedDirOrFiles}}
-        <a href='#' class='ui item'>
-          <i class='write icon'></i>
-          Rename
-        </a>
-        <a {{action 'destroyDirOrFiles' selectedDirOrFiles}} class='ui item'>
-          <i class='trash icon'></i>
-          Delete
-        </a>
-      {{/if}}
+  {{#directory-browser as |browser|}}
+    {{#browser.dimmer class='inverted'}}
+      <div class='ui loader' />
+    {{/browser.dimmer}}
+    {{#browser.menu as |menu|}}
+      {{#menu.item tagName='a'}}
+        <i class='write icon' />
+        Rename
+      {{/menu.item}}
+      {{#menu.item tagName='a' click=(action 'destroyDirOrFiles' selectedDirOrFiles)}}
+        <i class='trash icon' />
+        Delete
+      {{/menu.item}}
+      {{!
+        The right side of the menu is a separate menu
+      }}
       <div class='right menu'>
-        <div class='ui item'>
+        {{#menu.item}}
           <div class='ui transparent input'>
-          {{input class='prompt' type='text' value=newDirOrFileNameText placeholder='Name'}}
+            {{input class='prompt' type='text' value=newDirOrFileNameText placeholder='Name'}}
           </div>
-        </div>
-        {{!
-          Using closure actions we need to prevent firing it if "button" is disabled.
-          Note that we are using anchors because buttons look very ugly as a menu item.
+        {{/menu.item}}
+        {{#menu.item tagName='a'
+          class=(concat 'icon ' (if (eq newDirOrFileNameText '') 'disabled'))
         }}
-        <a class='ui icon item {{if (eq newDirOrFileNameText '') 'disabled'}}'>
-          <i class='file icon'></i>
-        </a>
-        <a
-          class='ui icon item {{if (eq newDirOrFileNameText '') 'disabled'}}'
-          onclick={{unless (eq newDirOrFileNameText '') (action 'createNewDirectoryFromInput')}}
-        >
-          <i class='folder icon'></i>
-        </a>
+          <i class='file icon' />
+        {{/menu.item}}
+        {{#menu.item tagName='a'
+          class=(concat 'icon ' (if (eq newDirOrFileNameText '') 'disabled'))
+          click=(unless (eq newDirOrFileNameText '') (action 'createNewDirectoryFromInput'))
+        }}
+          <i class='folder icon' />
+        {{/menu.item}}
       </div>
-    </div>
-    <table class='ui bottom attached unstackable selectable table'>
+    {{/browser.menu}}
+    {{#browser.table class='unstackable selectable' as |table|}}
       <thead>
         <tr>
         <th>Name</th>
         <th>Modified</th>
         </tr>
       </thead>
-
       <tbody>
         {{#each model.children as |child|}}
-        {{#unless child.isNew}}
-          <tr
-            class='table-entry directory-entry
-              {{if (array-contains selectedDirOrFiles child) 'active'}}'
-            {{action 'setSelectedDirOrFile' child }}
-          >
-            {{! Name }}
-            <td>
-              {{#link-to 'home.directory' child}}
-                <i class='folder icon'></i>
-                {{child.name}}
-              {{/link-to}}
-            </td>
-            {{! Modified }}
-            <td>--</td>
-          </tr>
-        {{else}}
-          <tr class='table-entry directory-entry loading'>
-            {{! Name }}
-            <td>
-              <a href='#'>
-                <i class='folder icon'></i>
-                {{child.name}}
-              </a>
-            </td>
-            {{! Modified }}
-            <td>--</td>
-          </tr>
-        {{/unless}}
+          {{#unless child.isNew}}
+            {{#table.row
+              class=(concat 'directory-entry ' (if (array-contains selectedDirOrFiles child) 'active'))
+              click=(action 'setSelectedDirOrFile' child)
+            }}
+              {{! Name }}
+              <td>
+                {{#link-to 'home.directory' child}}
+                  <i class='folder icon'></i>
+                  {{child.name}}
+                {{/link-to}}
+              </td>
+              {{! Modified }}
+              <td>--</td>
+            {{/table.row}}
+          {{else}}
+            {{#table.row class='directory-entry loading'}}
+              {{! Name }}
+              <td>
+                <a href='#'>
+                  <i class='folder icon'></i>
+                  {{child.name}}
+                </a>
+              </td>
+              {{! Modified }}
+              <td>--</td>
+            {{/table.row}}
+          {{/unless}}
         {{/each}}
       </tbody>
-    </table>
-  </div>
-
+    {{/browser.table}}
+  {{/directory-browser}}
 </div>

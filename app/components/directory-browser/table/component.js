@@ -8,5 +8,6 @@ const {
 } = Ember;
 
 export default Component.extend({
-  classNames: w('ui fixed borderless menu'),
+  tagName: 'table',
+  classNames: w('ui bottom attached table'),
 });

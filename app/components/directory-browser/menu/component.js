@@ -8,5 +8,5 @@ const {
 } = Ember;
 
 export default Component.extend({
-  classNames: w('ui fixed borderless menu'),
+  classNames: w('ui top attached mini menu'),
 });
