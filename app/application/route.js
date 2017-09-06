@@ -10,6 +10,7 @@ const {
 } = Ember;
 
 const DEFAULT_LOCK_OPTS = {
+  autoclose: true,
   auth: {
     redirect: false,
     params: {
