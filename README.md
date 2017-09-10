@@ -1,7 +1,32 @@
 # Smartdirect-web
 
-This README outlines the details of collaborating on this Ember application.
-A short introduction of this app could easily go here.
+Smartdirect is like Dropbox for URL-shorteners. Instead of files, you store links which you can update any time. So `/blogs/latest` can be updated every time you post and everyone with the link will always see your latest post!
+
+[![Demo](/doc/demo.gif)
+
+## Related Repositories
+
+* [Backend](https://github.com/prshreshtha/smartdirect-backend)
+
+## Roadmap
+
+- [X] Directory Browser
+  * [X] View (**needs testing**)
+  * [X] Create / delete (**needs testing**)
+  * [ ] Update
+  * [X] Error handling (partial / **needs testing**)
+- [ ] Linkation Browser
+  * [ ] View
+  * [ ] Create / delete
+  * [ ] Update
+  * [ ] Error handling
+- [ ] User profile page
+  * [ ] View user info
+  * [ ] Update friendly-name (backend is ready)
+- [ ] UI
+  * [ ] Cleaner design (Ember Paper?)
+  * [ ] Mobile design
+  * [ ] Error messages
 
 ## Prerequisites
 
@@ -15,24 +40,20 @@ You will need the following things properly installed on your computer.
 
 ## Installation
 
-* `git clone <repository-url>` this repository
-* change into the new directory
+* `git clone https://github.com/prshreshtha/smartdirect-web`
+* `cd smartdirect-web`
 * `npm install`
 * `bower install`
 
 ## Running / Development
 
-* `ember serve`
+* Set up the [backend](https://github.com/prshreshtha/smartdirect-backend) at port 3000.
+* `ember serve --proxy http://localhost:3000`
 * Visit your app at [http://localhost:4200](http://localhost:4200).
-
-### Code Generators
-
-Make use of the many generators for code, try `ember help generate` for more details
 
 ### Running Tests
 
-* `ember test`
-* `ember test --server`
+TODO
 
 ### Building
 
@@ -41,7 +62,7 @@ Make use of the many generators for code, try `ember help generate` for more det
 
 ### Deploying
 
-Specify what it takes to deploy your app.
+TODO
 
 ## Further Reading / Useful Links
 
