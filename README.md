@@ -2,7 +2,7 @@
 
 Smartdirect is like Dropbox for URL-shorteners. Instead of files, you store links which you can update any time. So `/blogs/latest` can be updated every time you post and everyone with the link will always see your latest post!
 
-[![Demo](/doc/demo.gif)
+![Demo](/doc/demo.gif)
 
 ## Related Repositories
 
